@@ -67,35 +67,21 @@ class Category(db.Model):
 class UserResource(Resource):
     def get(self, user_id):
         current_user = User.query.get(user_id)
-        return {
-            "id": current_user.id,
-            "username": current_user.username,
-            "email": current_user.email,
-            "password": current_user.password
-        }
-api.add_resource(UserResource, '/users/<int:user_id>')        
+        return current_user.serialize()
+api.add_resource(UserResource, '/users/<int:user_id>', '/users')    
 
 @app.route('/books/<book_id>')
 class BooksResource(Resource):
     def get(self, book_id):
         current_book = Book.query.get(book_id)
-        return {
-            "id": current_book.id,
-            "title": current_book.title,
-            "author": current_book.author,
-            "publication_year": current_book.publication_year,
-            "category_id": current_book.category_id
-        }
+        return current_book.serialize()
 api.add_resource(BooksResource, '/books/<int:book_id>')           
 
 @app.route('/categories/<category_id>')
 class CategoryResource(Resource):
     def get(self, category_id):
         current_category = Category.query.get(category_id)
-        return {
-            "id": current_category.id,
-            "name": current_category.name
-        }
+        return current_category.serialize()
 api.add_resource(CategoryResource, '/categories/<int:category_id>')   
 
 if __name__ == "__main__":
