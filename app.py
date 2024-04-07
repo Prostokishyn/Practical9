@@ -63,21 +63,18 @@ class Category(db.Model):
     def __repr__(self):
         return f"Category('{self.name}')"
 
-@app.route('/users/<user_id>')
 class UserResource(Resource):
     def get(self, user_id):
         current_user = User.query.get(user_id)
         return current_user.serialize()
-api.add_resource(UserResource, '/users/<int:user_id>', '/users')    
+api.add_resource(UserResource, '/users/<int:user_id>')    
 
-@app.route('/books/<book_id>')
 class BooksResource(Resource):
     def get(self, book_id):
         current_book = Book.query.get(book_id)
         return current_book.serialize()
 api.add_resource(BooksResource, '/books/<int:book_id>')           
 
-@app.route('/categories/<category_id>')
 class CategoryResource(Resource):
     def get(self, category_id):
         current_category = Category.query.get(category_id)
