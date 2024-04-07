@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from flask_restful import Resource, Api
-from flask_sqlalchemy import SQLAlchemyадф
+from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -63,37 +63,39 @@ class Category(db.Model):
     def __repr__(self):
         return f"Category('{self.name}')"
 
-@app.route('/users/<int:user_id>')
+@app.route('/users/<user_id>')
 class UserResource(Resource):
     def get(self, user_id):
-        current_user = User.query.filter_by(id=user_id).first()
-        if current_user:
-            return current_user.serialize()
-        else:
-            return "User not found", 404
-
+        current_user = User.query.get(user_id)
+        return {
+            "id": current_user.id,
+            "username": current_user.username,
+            "email": current_user.email,
+            "password": current_user.password
+        }
 api.add_resource(UserResource, '/users/<int:user_id>')        
 
-@app.route('/books/<int:book_id>')
+@app.route('/books/<book_id>')
 class BooksResource(Resource):
     def get(self, book_id):
-        current_book = Book.query.filter_by(id=book_id).first()
-        if current_book:
-            return current_book.serialize()
-        else:
-            return "Book not found", 404
-
+        current_book = Book.query.get(book_id)
+        return {
+            "id": current_book.id,
+            "title": current_book.title,
+            "author": current_book.author,
+            "publication_year": current_book.publication_year,
+            "category_id": current_book.category_id
+        }
 api.add_resource(BooksResource, '/books/<int:book_id>')           
 
-@app.route('/categories/<int:category_id>')
+@app.route('/categories/<category_id>')
 class CategoryResource(Resource):
     def get(self, category_id):
-        current_category = Category.query.filter_by(id=category_id).first()
-        if current_category:
-            return current_category.serialize()
-        else:
-            return "Category not found", 404
-
+        current_category = Category.query.get(category_id)
+        return {
+            "id": current_category.id,
+            "name": current_category.name
+        }
 api.add_resource(CategoryResource, '/categories/<int:category_id>')   
 
 if __name__ == "__main__":
