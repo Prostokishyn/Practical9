@@ -39,12 +39,13 @@ class Book(db.Model):
     category_id = db.Column(db.Integer, nullable=False)
 
     def serialize(self):
+        current_category = Category.query.get(self.category_id)
         return {
             "id": self.id,
             "title": self.title,
             "author": self.author,
             "publication_year": self.publication_year,
-            "category_id": self.category_id
+            "category": current_category.name
         }
 
     def __repr__(self):
